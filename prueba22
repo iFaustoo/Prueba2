@@ -1,1 +1,121 @@
-Prueba
+Form1.cs
+namespace ej1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        Tarjeta nueva;
+        static int numero = 1;
+        private void btnSumar_Click(object sender, EventArgs e)
+        {
+            string nombre = tbNombre.Text;
+            int dni = Convert.ToInt32(tbDNI.Text);
+            nueva = new Tarjeta(numero++, nombre, dni);
+            nueva.Saldo = 10000;
+        }
+
+        private void btnCargar_Click(object sender, EventArgs e)
+        {
+            double monto = Convert.ToDouble(tbMonto.Text);
+            if (nueva.CargarJuego(monto))
+            {
+                MessageBox.Show(nueva.Dueño.VerDatos(),$"Saldo: {nueva.Saldo}").ToString();
+            }
+            else
+            {
+                MessageBox.Show("Saldo insuficiente");
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+Persona.cs
+namespace ej1
+{
+    internal class Persona
+    {
+
+        private string nombre;
+        private int dni;
+
+        public DateTime FechanACIMIENTO
+        {
+            get; set;
+        }
+
+        public Persona(string nombre, int dni)
+        {
+            this.nombre = nombre;
+            this.dni = dni;
+        }
+
+        public string VerDatos()
+        {
+            return $"{dni} - {nombre}";
+        }
+
+    }
+}
+
+
+
+
+
+
+
+Tarjeta.cs
+namespace ej1
+{
+    internal class Tarjeta
+    {
+        public int Nro
+        { 
+         private set;
+            
+         get;
+        }
+        public Persona Dueño
+            { private set; get; }
+        
+        public DateTime FechaIngreso
+            { private set; get; }
+
+        public DateTime FechaSalida
+            { private set; get; }
+
+        public double Saldo
+            { set; get; }
+        public Tarjeta(int numero, string nombre,int dni) 
+        {
+            Dueño = new Persona(nombre, dni);
+            FechaIngreso = DateTime.Today;
+            FechaSalida = FechaIngreso.AddDays(2);
+        }
+
+        public bool CargarJuego(double monto)
+        {
+            bool respuesta = false;
+            if (Saldo > monto)
+            { 
+                Saldo -= monto;
+                respuesta = true; 
+            }
+            return respuesta;
+        }
+
+    }
+}
+
+
+
